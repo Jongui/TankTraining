@@ -14,11 +14,14 @@ public class PlaneManager
 
 	public void Setup()
 	{
-		
+		m_Movement = m_Instance.GetComponent<PlaneMovement>();
+
 	}
 
 	public void SpawnPlane(Transform spawnPoint)
 	{
+		m_Movement = m_Instance.GetComponent<PlaneMovement>();
+
 		//m_Instance =
 		//	Instantiate(m_PlanePrefab, spawnPoint.position, spawnPoint.rotation) as GameObject;
 		
