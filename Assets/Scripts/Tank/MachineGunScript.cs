@@ -6,7 +6,9 @@ public class MachineGunScript : MonoBehaviour {
 
 	public LayerMask m_TankMask;
 	public float m_MaxLifeTime = 1500f;                  
-	public float m_ExplosionRadius = 0.1f; 
+	public float m_ExplosionRadius = 0.1f;
+
+	[HideInInspector] public TankManager m_TankManager;
 
 	// Use this for initialization
 	void Start () {
@@ -33,7 +35,14 @@ public class MachineGunScript : MonoBehaviour {
 			if (!targetHealth)
 				continue;
 
-			float damage = 5;
+			int damage = 5;
+
+			TankShooting targetShooting = targetRigidbody.GetComponent<TankShooting> ();
+			if (m_TankManager.m_PlayerNumber == targetShooting.m_PlayerNumber) {
+				m_TankManager.SubPoints (damage);
+			} else {
+				m_TankManager.AddPoints (damage);
+			}
 
 			targetHealth.TakeDamage (damage);
 		}

@@ -5,22 +5,21 @@ using UnityEngine;
 public class PlaneMovement : MonoBehaviour {
 
 	[HideInInspector]public int m_TargetPlayer = 1;
-	public float m_Altitude;
-	public Rigidbody m_Bombs;
-	public int m_BombsCount;
+	[HideInInspector]public TankManager m_TargetTank;
+	[HideInInspector]public Vector3 m_Velocity;
 
-	private TankManager m_TargetTank;
-	private Vector3 m_StartPosition;
+	public float m_Altitude;
+	public PlaneShooting m_PlaneShooting;
+
 	private Vector3 m_TempPosition;
+	private Vector3 m_StartPosition;
 	private Vector3 m_Destination;
 	private float m_Speed = 20f;
 	private Rigidbody m_Rb;
 	private Transform m_FirstTarget;
 	private Vector3 m_LastPosition;
-	private Vector3 m_Velocity;
-	private bool m_Fired;
 	private bool m_TempDest;
-	private float bombInterval;
+	private float m_BombInterval;
 	public float m_MaxLifeTime = 20f;
 
 	// Use this for initialization
@@ -28,7 +27,6 @@ public class PlaneMovement : MonoBehaviour {
 		//target = new Vector3 (0, 20, 0);
 		m_Rb = GetComponent<Rigidbody>();
 		m_TargetTank = GameManager.m_Instance.FindTargetTank (m_TargetPlayer);
-		m_Fired = false;
 		m_StartPosition = transform.position;
 		Destroy(gameObject, m_MaxLifeTime);
 	}
@@ -36,9 +34,6 @@ public class PlaneMovement : MonoBehaviour {
 	void FixedUpdate()
 	{
 		MovePlane ();
-		if (!m_Fired) {
-			DropBomb ();
-		}
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -51,15 +46,18 @@ public class PlaneMovement : MonoBehaviour {
 		Vector3 targetPosition = m_TargetTank.m_Instance.transform.position;
 		m_StartPosition.y = targetPosition.y = m_Altitude;
 		m_Destination = (targetPosition - transform.position).normalized;
-		if (!m_Fired) {
+		if (!m_PlaneShooting.m_Fired) {
 			transform.LookAt (targetPosition);
 			m_Rb.MovePosition (transform.position + m_Destination * m_Speed * Time.fixedDeltaTime);
 			m_Velocity = (transform.position - m_LastPosition) / Time.deltaTime;
 		} else {
-			if (m_TempDest) {
-				targetPosition = m_TempPosition;
+			if (m_PlaneShooting.m_Firing) {
+				m_TempDest = true;
+				targetPosition = m_PlaneShooting.m_LastBombTransform.position;
 			}
-			else {
+				else 
+			{
+				m_TempDest = false;
 				targetPosition = m_StartPosition;
 			}
 			targetPosition.y = m_Altitude;
@@ -81,25 +79,30 @@ public class PlaneMovement : MonoBehaviour {
 		m_LastPosition = transform.position;
 	}
 
-	private void DropBomb(){
+	public float CalcDistance(){
 		Vector3 targetPosition = m_TargetTank.m_Instance.transform.position;
+		//targetPosition.y = m_Altitude;
+		return Vector3.Distance(targetPosition, transform.position);
+	}
+	private void DropBomb(){
+		/*Vector3 targetPosition = m_TargetTank.m_Instance.transform.position;
 		//targetPosition.y = m_Altitude;
 		float dist = Vector3.Distance(targetPosition, transform.position);
 		print ("Distancia: " + dist);
 		if (m_BombsCount == 0)
 			m_Fired = true;
-		if (dist <= 50.0f && !m_Fired && bombInterval >= 0.3f){
+		if (dist <= 50.0f && !m_Fired && m_BombInterval >= 0.3f){
 			m_TempDest = true;
 			m_TempPosition = targetPosition;
 			m_TempPosition.y = m_Altitude;
 			Rigidbody bombInstance = Instantiate (m_Bombs, transform.position, transform.rotation) as Rigidbody;
 			bombInstance.velocity += m_Velocity;
 			m_BombsCount--;
-			bombInterval = 0;
+			m_BombInterval = 0;
 			//bombInstance.MovePosition (transform.position + direction * m_Speed * Time.deltaTime);
 			//bombInstance.AddForce(m_Velocity);
 		}
-		bombInterval += Time.deltaTime;
+		m_BombInterval += Time.deltaTime;*/
 	}
 
 }

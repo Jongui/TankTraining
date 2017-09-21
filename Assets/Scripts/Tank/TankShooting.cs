@@ -23,6 +23,7 @@ public class TankShooting : MonoBehaviour
 	[HideInInspector]public int m_ShellAmmo;
 	[HideInInspector]public Text m_AmmoText;
 	[HideInInspector]public Color m_PlayerColor;
+	[HideInInspector]public TankManager m_TankManager;
 
     private string m_FireButton;         
     private float m_CurrentLaunchForce;  
@@ -69,7 +70,7 @@ public class TankShooting : MonoBehaviour
 		MachineGunButtonAction ();
 		PlaneButtonAction ();
 		string coloredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
-		m_AmmoText.text = coloredPlayerText + "\n Guided shells: " + m_GuidedShellAmmo + "\n Normal shells: " + m_ShellAmmo + "\n Bombers: " + m_PlanesCount;
+		m_AmmoText.text = coloredPlayerText + "\n Score: " + m_TankManager.m_PlayerScore + "\n Guided shells: " + m_GuidedShellAmmo + "\n Normal shells: " + m_ShellAmmo + "\n Bombers: " + m_PlanesCount;
     }
 
 	private void MachineGunButtonAction(){
@@ -115,6 +116,8 @@ public class TankShooting : MonoBehaviour
 		Rigidbody shellInstance = Instantiate (m_GuidedShell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
 		GuidedShellScript shell = shellInstance.GetComponent<GuidedShellScript>();
 		shell.m_TargetPlayer = m_TargetGuided;
+		ShellExplosion explosion = shell.GetComponent<ShellExplosion> ();
+		explosion.m_TankManager = this.m_TankManager;
 		//shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
 		//TankManager targetTank = GameManager.m_Instance.FindTargetTank (m_TargetGuided);
 		m_ShootingAudio.clip = m_FireClip;
@@ -129,6 +132,8 @@ public class TankShooting : MonoBehaviour
 		m_Fired = true;
 		Rigidbody shellInstance = Instantiate (m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
 		shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
+		ShellExplosion explosion = shellInstance.GetComponent<ShellExplosion> ();
+		explosion.m_TankManager = this.m_TankManager;
 		m_ShootingAudio.clip = m_FireClip;
 		m_ShootingAudio.Play ();
 		m_CurrentLaunchForce = m_MinLaunchForce;
@@ -139,6 +144,9 @@ public class TankShooting : MonoBehaviour
 	private void MachineGunFire(){
 		Rigidbody shellInstance = Instantiate (m_MachineGunBullet, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
 		shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward * 2;
+		MachineGunScript fire = shellInstance.GetComponent<MachineGunScript> ();
+		fire.m_TankManager = this.m_TankManager;
+
 		//m_ShootingAudio.clip = m_FireClip;
 		//m_ShootingAudio.Play ();
 		m_CurrentLaunchForce = m_MinLaunchForce;
@@ -152,6 +160,7 @@ public class TankShooting : MonoBehaviour
 			
 			m_PlaneManager.m_Instance = Instantiate (m_PlaneManager.m_PlanePrefab, m_PlaneSpawnPoint.position, m_PlaneSpawnPoint.rotation) as GameObject;
 			m_PlaneManager.m_TargetPlayer = m_TargetGuided;
+			m_PlaneManager.m_TankManager = this.m_TankManager;
 			m_PlaneManager.Setup ();
 			m_PlanesCount--;
 			GameManager.m_Instance.m_CameraControl.AddCameraTarget (m_PlaneManager.m_Instance.transform);

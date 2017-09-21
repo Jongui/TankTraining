@@ -14,7 +14,8 @@ public class TankManager
     [HideInInspector] public int m_PlayerNumber;             
     [HideInInspector] public string m_ColoredPlayerText;
     [HideInInspector] public GameObject m_Instance;          
-    [HideInInspector] public int m_Wins;                     
+    [HideInInspector] public int m_Wins;  
+	[HideInInspector] public int m_PlayerScore;
 
 
     private TankMovement m_Movement;       
@@ -31,6 +32,7 @@ public class TankManager
 		m_Shooting.m_AmmoText = m_AmmoText;
 		m_Shooting.m_PlayerColor = m_PlayerColor;
 		m_Shooting.m_PlaneSpawnPoint = m_PlaneSpawnPoint;
+		m_Shooting.m_TankManager = this;
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;
         m_Shooting.m_PlayerNumber = m_PlayerNumber;
@@ -52,6 +54,13 @@ public class TankManager
         }
     }
 
+	public void AddPoints(int points){
+		this.m_PlayerScore += points;
+	}
+
+	public void SubPoints(int points){
+		this.m_PlayerScore -= points;
+	}
 
     public void DisableControl()
     {

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public int m_NumRoundsToWin = 5;        
+	public int m_NumRounds;        
     public float m_StartDelay = 3f;         
     public float m_EndDelay = 3f;           
     public CameraControl m_CameraControl;   
@@ -114,7 +114,9 @@ public class GameManager : MonoBehaviour
 		if (m_RoundWinner != null) {
 			m_RoundWinner.m_Wins++;
 		}
-		m_GameWinner = GetGameWinner ();
+
+		if(m_RoundNumber == m_NumRounds)
+			m_GameWinner = GetGameWinner ();
 		string message = EndMessage ();
 		m_MessageText.text = message;
         yield return m_EndWait;
@@ -148,13 +150,24 @@ public class GameManager : MonoBehaviour
 
     private TankManager GetGameWinner()
     {
-        for (int i = 0; i < m_Tanks.Length; i++)
+        /*for (int i = 0; i < m_Tanks.Length; i++)
         {
             if (m_Tanks[i].m_Wins == m_NumRoundsToWin)
                 return m_Tanks[i];
-        }
+        }*/
 
-        return null;
+		int index = 0;
+		int highScore = 0;
+		for (int i = 0; i < m_Tanks.Length; i++)
+		{
+			if (m_Tanks [i].m_PlayerScore > highScore) 
+			{
+				index = i;
+				highScore = m_Tanks[i].m_PlayerScore;
+			}
+		}
+
+		return m_Tanks [index];
     }
 
 

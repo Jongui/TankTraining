@@ -10,6 +10,7 @@ public class BombExplosion : MonoBehaviour
     public float m_MaxLifeTime = 3f;                  
     public float m_ExplosionRadius;              
 
+	[HideInInspector] public TankManager m_TankManager;
 
     private void Start()
     {
@@ -34,6 +35,14 @@ public class BombExplosion : MonoBehaviour
 
 			float damage = CalculateDamage (targetRigidbody.position);
 
+			TankShooting targetShooting = targetRigidbody.GetComponent<TankShooting> ();
+
+			if (m_TankManager.m_PlayerNumber == targetShooting.m_PlayerNumber) {
+				this.m_TankManager.SubPoints ((int)damage);
+			} else {
+				this.m_TankManager.AddPoints ((int)damage);
+			}
+
 			targetHealth.TakeDamage (damage);
 		}
 
@@ -41,7 +50,6 @@ public class BombExplosion : MonoBehaviour
 		if (bombRigidbody)
 			return;
 		
-		//if (tankFound) {
 			m_ExplosionParticles.transform.parent = null;
 			m_ExplosionParticles.Play ();
 			m_ExplosionAudio.Play ();
@@ -49,7 +57,6 @@ public class BombExplosion : MonoBehaviour
 
 			Destroy (m_ExplosionParticles.gameObject, m_ExplosionParticles.main.duration);
 			Destroy (gameObject);
-		//}
     }
 
 
