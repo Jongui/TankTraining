@@ -14,11 +14,11 @@ public class TankShooting : MonoBehaviour
     public AudioSource m_ShootingAudio;  
     public AudioClip m_ChargingClip;     
     public AudioClip m_FireClip;         
-    public float m_MinLaunchForce = 15f; 
+	public float m_MinLaunchForce = 15f; 
     public float m_MaxLaunchForce = 30f; 
     public float m_MaxChargeTime = 0.75f;
 	[HideInInspector]public Transform m_PlaneSpawnPoint;
-	[HideInInspector]public Rigidbody m_Plane;
+	[HideInInspector]public PlaneManager m_PlaneManager;
 	[HideInInspector]public int m_GuidedShellAmmo;
 	[HideInInspector]public int m_ShellAmmo;
 	[HideInInspector]public Text m_AmmoText;
@@ -150,11 +150,11 @@ public class TankShooting : MonoBehaviour
 			if (m_PlanesCount == 0)
 				return;
 			
-			Rigidbody planeInstance = Instantiate (m_Plane, m_PlaneSpawnPoint.position, m_PlaneSpawnPoint.rotation) as Rigidbody;
-			PlaneScript plane = planeInstance.GetComponent<PlaneScript>();
-			plane.m_TargetPlayer = m_TargetGuided;
+			//Rigidbody planeInstance = Instantiate (m_Plane, m_PlaneSpawnPoint.position, m_PlaneSpawnPoint.rotation) as Rigidbody;
+			m_PlaneManager.SpawnPlane (m_PlaneSpawnPoint);
+			m_PlaneManager.m_TargetPlayer = m_TargetGuided;
 			m_PlanesCount--;
-			GameManager.m_Instance.m_CameraControl.AddCameraTarget (planeInstance.transform);
+			GameManager.m_Instance.m_CameraControl.AddCameraTarget (m_PlaneManager.m_Instance.transform);
 		}
 	}
 }

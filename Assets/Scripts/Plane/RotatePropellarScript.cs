@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RotatePropellarScript : MonoBehaviour {
 
+	public int m_Speed;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -11,6 +13,6 @@ public class RotatePropellarScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Rotate (Vector3.up * 1000);
+		transform.Rotate (Vector3.up * m_Speed);
 	}
 }

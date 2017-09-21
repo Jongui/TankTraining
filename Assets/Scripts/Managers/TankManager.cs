@@ -9,7 +9,7 @@ public class TankManager
     public Transform m_SpawnPoint;
 	public Transform m_PlaneSpawnPoint;
 	public Text m_AmmoText;
-	public Rigidbody m_Plane;
+	public PlaneManager m_PlaneManager;
 
     [HideInInspector] public int m_PlayerNumber;             
     [HideInInspector] public string m_ColoredPlayerText;
@@ -34,7 +34,7 @@ public class TankManager
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;
         m_Shooting.m_PlayerNumber = m_PlayerNumber;
-		m_Shooting.m_Plane = m_Plane;
+		m_Shooting.m_PlaneManager = m_PlaneManager;
 
 		if (m_PlayerNumber == 1) {
 			m_Shooting.m_TargetGuided = 2;

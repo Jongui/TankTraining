@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaneScript : MonoBehaviour {
+public class PlaneMovement : MonoBehaviour {
 
 	public int m_TargetPlayer = 1;
 	public float m_Altitude;
@@ -85,6 +85,7 @@ public class PlaneScript : MonoBehaviour {
 		Vector3 targetPosition = m_TargetTank.m_Instance.transform.position;
 		//targetPosition.y = m_Altitude;
 		float dist = Vector3.Distance(targetPosition, transform.position);
+		print ("Distancia: " + dist);
 		if (m_BombsCount == 0)
 			m_Fired = true;
 		if (dist <= 50.0f && !m_Fired && bombInterval >= 0.3f){
