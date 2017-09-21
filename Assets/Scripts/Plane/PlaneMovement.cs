@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlaneMovement : MonoBehaviour {
 
-	public int m_TargetPlayer = 1;
+	[HideInInspector]public int m_TargetPlayer = 1;
 	public float m_Altitude;
 	public Rigidbody m_Bombs;
 	public int m_BombsCount;
@@ -102,12 +102,4 @@ public class PlaneMovement : MonoBehaviour {
 		bombInterval += Time.deltaTime;
 	}
 
-	// Update is called once per frame
-	void Update () {
-		//transform.RotateAround (target, Vector3.up, m_Speed * Time.deltaTime);	
-
-		//m_Rb.AddForce(transform.forward * m_Speed);
-
-		//transform.Rotate(0.0f, m_Speed * Time.deltaTime, -10.0f * Time.deltaTime);
-	}
 }

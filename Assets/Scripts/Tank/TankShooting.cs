@@ -150,9 +150,9 @@ public class TankShooting : MonoBehaviour
 			if (m_PlanesCount == 0)
 				return;
 			
-			//Rigidbody planeInstance = Instantiate (m_Plane, m_PlaneSpawnPoint.position, m_PlaneSpawnPoint.rotation) as Rigidbody;
-			m_PlaneManager.SpawnPlane (m_PlaneSpawnPoint);
+			m_PlaneManager.m_Instance = Instantiate (m_PlaneManager.m_PlanePrefab, m_PlaneSpawnPoint.position, m_PlaneSpawnPoint.rotation) as GameObject;
 			m_PlaneManager.m_TargetPlayer = m_TargetGuided;
+			m_PlaneManager.Setup ();
 			m_PlanesCount--;
 			GameManager.m_Instance.m_CameraControl.AddCameraTarget (m_PlaneManager.m_Instance.transform);
 		}

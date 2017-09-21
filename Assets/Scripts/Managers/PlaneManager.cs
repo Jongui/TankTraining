@@ -15,18 +15,12 @@ public class PlaneManager
 	public void Setup()
 	{
 		m_Movement = m_Instance.GetComponent<PlaneMovement>();
+		m_Instance.SetActive (true);
+		m_Movement.enabled = true;
+		m_Movement.m_TargetPlayer = m_TargetPlayer;
 
 	}
-
-	public void SpawnPlane(Transform spawnPoint)
-	{
-		m_Movement = m_Instance.GetComponent<PlaneMovement>();
-
-		//m_Instance =
-		//	Instantiate(m_PlanePrefab, spawnPoint.position, spawnPoint.rotation) as GameObject;
 		
-	}
-
 	public void DisableControl()
 	{
 		m_Movement.enabled = false;
