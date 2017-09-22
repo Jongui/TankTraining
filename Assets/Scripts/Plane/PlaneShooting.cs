@@ -13,7 +13,7 @@ public class PlaneShooting : MonoBehaviour {
 
 	[HideInInspector] public bool m_Fired;
 	[HideInInspector] public bool m_Firing;
-	[HideInInspector] public TankManager m_TankManager;
+	[HideInInspector] public int m_PlayerNumber;
 
 	private float m_BombInterval;
 	private Rigidbody m_LastBomb;
@@ -50,7 +50,7 @@ public class PlaneShooting : MonoBehaviour {
 			Rigidbody bombInstance = Instantiate (m_Bombs, transform.position, transform.rotation) as Rigidbody;
 			bombInstance.velocity += m_PlaneMovement.m_Velocity;
 			BombExplosion explosion = bombInstance.GetComponent<BombExplosion> ();
-			explosion.m_TankManager = m_TankManager;
+			explosion.m_PlayerNumber = m_PlayerNumber;
 			m_BombsCount--;
 			m_BombInterval = 0;
 			m_Firing = true;

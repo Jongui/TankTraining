@@ -10,7 +10,8 @@ public class PlaneManager
 	public GameObject m_PlanePrefab;
 
 	[HideInInspector] public GameObject m_Instance;
-	[HideInInspector] public TankManager m_TankManager;
+	[HideInInspector] public int m_PlayerNumber;
+	//[HideInInspector] public TankManager m_TankManager;
 
 	private PlaneMovement m_Movement;
 	private PlaneShooting m_Shooting;
@@ -23,7 +24,7 @@ public class PlaneManager
 		m_Movement.m_TargetPlayer = m_TargetPlayer;
 
 		m_Shooting = m_Instance.GetComponent<PlaneShooting> ();
-		m_Shooting.m_TankManager = m_TankManager;
+		m_Shooting.m_PlayerNumber = m_PlayerNumber;
 
 	}
 		

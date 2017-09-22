@@ -10,7 +10,7 @@ public class ShellExplosion : MonoBehaviour
     public float m_MaxLifeTime = 2f;                  
     public float m_ExplosionRadius = 5f;              
 
-	[HideInInspector] public TankManager m_TankManager;
+	[HideInInspector] public int m_PlayerNumber;
 
     private void Start()
     {
@@ -37,11 +37,14 @@ public class ShellExplosion : MonoBehaviour
 
 			TankShooting targetShooting = targetRigidbody.GetComponent<TankShooting> ();
 
-			if (m_TankManager.m_PlayerNumber == targetShooting.m_PlayerNumber) {
-				this.m_TankManager.SubPoints ((int)damage);
+			TankManager tankManager = GameManager.m_Instance.FindTankManager (m_PlayerNumber);
+
+			if (tankManager.m_PlayerNumber == targetShooting.m_PlayerNumber) {
+				tankManager.SubPoints ((int)damage);
 			} else {
-				this.m_TankManager.AddPoints ((int)damage);
+				tankManager.AddPoints ((int)damage);
 			}
+
 			targetHealth.TakeDamage (damage);
 		}
 

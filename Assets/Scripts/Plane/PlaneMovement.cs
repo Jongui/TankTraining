@@ -20,15 +20,14 @@ public class PlaneMovement : MonoBehaviour {
 	private Vector3 m_LastPosition;
 	private bool m_TempDest;
 	private float m_BombInterval;
-	public float m_MaxLifeTime = 20f;
+	private const float m_MaxLifeTime = 10f;
 
 	// Use this for initialization
 	void Start () {
 		//target = new Vector3 (0, 20, 0);
 		m_Rb = GetComponent<Rigidbody>();
-		m_TargetTank = GameManager.m_Instance.FindTargetTank (m_TargetPlayer);
+		m_TargetTank = GameManager.m_Instance.FindTankManager (m_TargetPlayer);
 		m_StartPosition = transform.position;
-		Destroy(gameObject, m_MaxLifeTime);
 	}
 
 	void FixedUpdate()
@@ -59,6 +58,7 @@ public class PlaneMovement : MonoBehaviour {
 			{
 				m_TempDest = false;
 				targetPosition = m_StartPosition;
+				Destroy(gameObject, m_MaxLifeTime);
 			}
 			targetPosition.y = m_Altitude;
 			float distToEnd = Vector3.Distance (targetPosition, transform.position);

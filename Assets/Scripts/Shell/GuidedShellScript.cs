@@ -17,7 +17,7 @@ public class GuidedShellScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		m_TargetTank = GameManager.m_Instance.FindTargetTank (m_TargetPlayer);
+		m_TargetTank = GameManager.m_Instance.FindTankManager (m_TargetPlayer);
 		//m_Target = m_TargetTank.m_Instance;
 		//m_StartTime = Time.deltaTime;
 		//check = false;

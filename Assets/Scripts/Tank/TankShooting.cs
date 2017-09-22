@@ -117,7 +117,7 @@ public class TankShooting : MonoBehaviour
 		GuidedShellScript shell = shellInstance.GetComponent<GuidedShellScript>();
 		shell.m_TargetPlayer = m_TargetGuided;
 		ShellExplosion explosion = shell.GetComponent<ShellExplosion> ();
-		explosion.m_TankManager = this.m_TankManager;
+		explosion.m_PlayerNumber = this.m_PlayerNumber;
 		//shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
 		//TankManager targetTank = GameManager.m_Instance.FindTargetTank (m_TargetGuided);
 		m_ShootingAudio.clip = m_FireClip;
@@ -133,7 +133,7 @@ public class TankShooting : MonoBehaviour
 		Rigidbody shellInstance = Instantiate (m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
 		shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
 		ShellExplosion explosion = shellInstance.GetComponent<ShellExplosion> ();
-		explosion.m_TankManager = this.m_TankManager;
+		explosion.m_PlayerNumber = this.m_PlayerNumber;
 		m_ShootingAudio.clip = m_FireClip;
 		m_ShootingAudio.Play ();
 		m_CurrentLaunchForce = m_MinLaunchForce;
@@ -160,7 +160,7 @@ public class TankShooting : MonoBehaviour
 			
 			m_PlaneManager.m_Instance = Instantiate (m_PlaneManager.m_PlanePrefab, m_PlaneSpawnPoint.position, m_PlaneSpawnPoint.rotation) as GameObject;
 			m_PlaneManager.m_TargetPlayer = m_TargetGuided;
-			m_PlaneManager.m_TankManager = this.m_TankManager;
+			m_PlaneManager.m_PlayerNumber = this.m_PlayerNumber;
 			m_PlaneManager.Setup ();
 			m_PlanesCount--;
 			GameManager.m_Instance.m_CameraControl.AddCameraTarget (m_PlaneManager.m_Instance.transform);
