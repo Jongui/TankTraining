@@ -51,6 +51,9 @@ public class TankManager
 		m_Movement.m_PlayerNumber = m_TankObject.m_PlayerNumber;
 		m_Shooting.m_PlayerNumber = m_TankObject.m_PlayerNumber;
 		m_Shooting.m_BomberManager = m_TankObject.m_BomberManager;
+		m_Shooting.m_ShellAmmo = m_TankObject.m_ShellAmmo;
+		m_Shooting.m_GuidedShellAmmo = m_TankObject.m_GuidedShellAmmo;
+		m_Shooting.m_BomberAmmo = m_TankObject.m_BomberAmmo;
 
 		if (m_TankObject.m_PlayerNumber == 1) {
 			m_Shooting.m_TargetGuided = 2;
@@ -98,12 +101,14 @@ public class TankManager
 			return;
 		m_TankObject.m_PlayerScore = newScore;
 		this.m_Shooting.m_ShellAmmo += shells;
+		this.m_TankObject.m_ShellAmmo = m_Shooting.m_ShellAmmo;
 	}
 
 	public void SubShell(int shells)
 	{
 		m_TankObject.m_PlayerScore += shells * m_ShellValue;
 		this.m_Shooting.m_ShellAmmo -= shells;
+		this.m_TankObject.m_ShellAmmo = m_Shooting.m_ShellAmmo;
 	}
 
 	public void AddGuidedShell(int shells)
@@ -113,12 +118,14 @@ public class TankManager
 			return;
 		m_TankObject.m_PlayerScore = newScore;
 		this.m_Shooting.m_GuidedShellAmmo += shells;
+		this.m_TankObject.m_GuidedShellAmmo = m_Shooting.m_GuidedShellAmmo;
 	}
 
 	public void SubGuidedShell(int shells)
 	{
 		m_TankObject.m_PlayerScore += shells * m_GuidedShellValue;
 		this.m_Shooting.m_GuidedShellAmmo -= shells;
+		this.m_TankObject.m_GuidedShellAmmo = m_Shooting.m_GuidedShellAmmo;
 	}
 
 	public void AddBomber(int bombers)
@@ -128,12 +135,14 @@ public class TankManager
 			return;
 		m_TankObject.m_PlayerScore = newScore;
 		this.m_Shooting.m_BomberAmmo += bombers;
+		this.m_TankObject.m_BomberAmmo = m_Shooting.m_BomberAmmo;
 	}
 
 	public void SubBomber(int bombers)
 	{
 		m_TankObject.m_PlayerScore += bombers * m_BomberValue;
 		this.m_Shooting.m_BomberAmmo -= bombers;
+		this.m_TankObject.m_BomberAmmo = m_Shooting.m_BomberAmmo;
 	}
     public void DisableControl()
     {

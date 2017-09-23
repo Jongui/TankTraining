@@ -119,6 +119,7 @@ public class GameManager : MonoBehaviour
 
 	private IEnumerator RoundEnding()
 	{
+		UpdateTankObject ();
 		DestroyAllPlanes ();
 		DisableTankControl ();
 		m_RoundWinner = null;
@@ -236,6 +237,18 @@ public class GameManager : MonoBehaviour
 				return m_Tanks [i];
 		}
 		return null;
+	}
+
+	public void UpdateTankObject()
+	{
+		for (int i = 0; i < m_Tanks.Length; i++) 
+		{
+			TankObject tankObject = m_Tanks [i].m_TankObject;
+			TankShooting tankShooting = m_Tanks[i].m_Instance.GetComponent<TankShooting>();
+			tankObject.m_BomberAmmo = tankShooting.m_BomberAmmo;
+			tankObject.m_ShellAmmo = tankShooting.m_ShellAmmo;
+			tankObject.m_GuidedShellAmmo = tankShooting.m_GuidedShellAmmo;
+		}
 	}
 
 	public void Quit()
