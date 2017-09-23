@@ -5,8 +5,7 @@ public class TankShooting : MonoBehaviour
 {
     public int m_PlayerNumber = 1;  
 	public int m_TargetGuided = 1;
-	public int m_PlanesCount;
-    public Rigidbody m_Shell;  
+	public Rigidbody m_Shell;  
 	public Rigidbody m_GuidedShell;
 	public Rigidbody m_MachineGunBullet;
 	public Transform m_FireTransform;    
@@ -18,9 +17,10 @@ public class TankShooting : MonoBehaviour
     public float m_MaxLaunchForce = 30f; 
     public float m_MaxChargeTime = 0.75f;
 	[HideInInspector]public Transform m_PlaneSpawnPoint;
-	[HideInInspector]public PlaneManager m_PlaneManager;
+	[HideInInspector]public BomberManager m_BomberManager;
 	[HideInInspector]public int m_GuidedShellAmmo = 0;
 	[HideInInspector]public int m_ShellAmmo = 0;
+	[HideInInspector]public int m_BomberAmmo;
 	[HideInInspector]public Text m_AmmoText;
 	[HideInInspector]public Color m_PlayerColor;
 	[HideInInspector]public TankManager m_TankManager;
@@ -35,7 +35,7 @@ public class TankShooting : MonoBehaviour
 	// Definir qual é o botão do míssel guidado
 	private string m_GuidedButton;
 	private string m_MachineGunButton;
-	private string m_PlaneButton;
+	private string m_BomberButton;
 
     private void OnEnable()
     {
@@ -52,7 +52,7 @@ public class TankShooting : MonoBehaviour
 		m_GuidedButton = "GuidedFire" + m_PlayerNumber;
 
 		m_MachineGunButton = "MachineGun" + m_PlayerNumber;
-		m_PlaneButton = "Plane" + m_PlayerNumber;
+		m_BomberButton = "Plane" + m_PlayerNumber;
 
         m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
 
@@ -64,9 +64,9 @@ public class TankShooting : MonoBehaviour
 		FireButtonAction ();
 		FireGuidedButtonAction ();
 		MachineGunButtonAction ();
-		PlaneButtonAction ();
+		BomberButtonAction ();
 		string coloredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
-		m_AmmoText.text = coloredPlayerText + "\n Score: " + m_TankManager.m_PlayerScore + "\n Guided shells: " + m_GuidedShellAmmo + "\n Normal shells: " + m_ShellAmmo + "\n Bombers: " + m_PlanesCount;
+		m_AmmoText.text = coloredPlayerText + "\n Score: " + m_TankManager.m_TankObject.m_PlayerScore + "\n Guided shells: " + m_GuidedShellAmmo + "\n Normal shells: " + m_ShellAmmo + "\n Bombers: " + m_BomberAmmo;
     }
 
 	private void MachineGunButtonAction(){
@@ -141,25 +141,25 @@ public class TankShooting : MonoBehaviour
 		Rigidbody shellInstance = Instantiate (m_MachineGunBullet, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
 		shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward * 2;
 		MachineGunScript fire = shellInstance.GetComponent<MachineGunScript> ();
-		fire.m_TankManager = this.m_TankManager;
+		fire.m_PlayerNumber = this.m_PlayerNumber;
 
 		//m_ShootingAudio.clip = m_FireClip;
 		//m_ShootingAudio.Play ();
 		m_CurrentLaunchForce = m_MinLaunchForce;
 	}
 
-	private void PlaneButtonAction(){
-		if(Input.GetButtonDown(m_PlaneButton))
+	private void BomberButtonAction(){
+		if(Input.GetButtonDown(m_BomberButton))
 		{
-			if (m_PlanesCount == 0)
+			if (m_BomberAmmo == 0)
 				return;
 			
-			m_PlaneManager.m_Instance = Instantiate (m_PlaneManager.m_PlanePrefab, m_PlaneSpawnPoint.position, m_PlaneSpawnPoint.rotation) as GameObject;
-			m_PlaneManager.m_TargetPlayer = m_TargetGuided;
-			m_PlaneManager.m_PlayerNumber = this.m_PlayerNumber;
-			m_PlaneManager.Setup ();
-			m_PlanesCount--;
-			GameManager.m_Instance.m_CameraControl.AddCameraTarget (m_PlaneManager.m_Instance.transform);
+			m_BomberManager.m_Instance = Instantiate (m_BomberManager.m_BomberPrefab, m_PlaneSpawnPoint.position, m_PlaneSpawnPoint.rotation) as GameObject;
+			m_BomberManager.m_TargetPlayer = m_TargetGuided;
+			m_BomberManager.m_PlayerNumber = this.m_PlayerNumber;
+			m_BomberManager.Setup ();
+			m_BomberAmmo--;
+			GameManager.m_Instance.m_CameraControl.AddCameraTarget (m_BomberManager.m_Instance.transform);
 		}
 	}
 }

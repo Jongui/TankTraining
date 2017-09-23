@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 	public GameObject m_TankPrefab;
 	public TankManager[] m_Tanks; 
 	public Transform m_SpawnPoint;
+	public int m_StartScore;
 	[HideInInspector] public static GameManager m_Instance;
 
 	private int m_RoundNumber;              
@@ -22,10 +23,10 @@ public class GameManager : MonoBehaviour
 	private TankManager m_GameWinner;
 
 
+
 	private void Awake()
 	{
 		if (m_Instance == null) {
-			DontDestroyOnLoad (gameObject);
 			m_Instance = this;
 		}
 	}
@@ -54,7 +55,8 @@ public class GameManager : MonoBehaviour
 		{
 			m_Tanks[i].m_Instance =
 				Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
-			m_Tanks[i].m_PlayerNumber = i + 1;
+			m_Tanks[i].m_TankObject.m_PlayerNumber = i + 1;
+			//DontDestroyOnLoad (m_Tanks[i].gameObject);
 			//m_Tanks [i].m_PlayerScore = 1000;
 			m_Tanks[i].Setup();
 		}
@@ -122,9 +124,10 @@ public class GameManager : MonoBehaviour
 		m_RoundWinner = null;
 		m_RoundWinner = GetRoundWinner ();
 		if (m_RoundWinner != null) {
-			m_RoundWinner.m_Wins++;
+			m_RoundWinner.m_TankObject.m_Wins++;
 		}
-		m_GameWinner = GetGameWinner ();
+		if(m_RoundNumber == m_NumRoundsToPlay)
+			m_GameWinner = GetGameWinner ();
 		string message = EndMessage ();
 		m_MessageText.text = message;
 		yield return m_EndWait;
@@ -158,13 +161,18 @@ public class GameManager : MonoBehaviour
 
 	private TankManager GetGameWinner()
 	{
+		int index = 0;
+		int maxScore = 0;
 		for (int i = 0; i < m_Tanks.Length; i++)
 		{
-			if (m_Tanks[i].m_Wins == m_NumRoundsToPlay)
-				return m_Tanks[i];
+			if (m_Tanks [i].m_TankObject.m_PlayerScore > maxScore) 
+			{
+				maxScore = m_Tanks [i].m_TankObject.m_PlayerScore;
+				index = i;
+			}
 		}
 
-		return null;
+		return m_Tanks[index];
 	}
 
 
@@ -173,17 +181,17 @@ public class GameManager : MonoBehaviour
 		string message = "DRAW!";
 
 		if (m_RoundWinner != null)
-			message = m_RoundWinner.m_ColoredPlayerText + " WINS THE ROUND!";
+			message = m_RoundWinner.m_TankObject.m_ColoredPlayerText + " WINS THE ROUND!";
 
 		message += "\n\n\n\n";
 
 		for (int i = 0; i < m_Tanks.Length; i++)
 		{
-			message += m_Tanks[i].m_ColoredPlayerText + ": " + m_Tanks[i].m_Wins + " WINS\n";
+			message += m_Tanks[i].m_TankObject.m_ColoredPlayerText + ": " + m_Tanks[i].m_TankObject.m_Wins + " WINS\n";
 		}
 
 		if (m_GameWinner != null)
-			message = m_GameWinner.m_ColoredPlayerText + " WINS THE GAME!";
+			message = m_GameWinner.m_TankObject.m_ColoredPlayerText + " WINS THE GAME!";
 
 		return message;
 	}
@@ -224,7 +232,7 @@ public class GameManager : MonoBehaviour
 
 	public TankManager FindTankManager(int tank){
 		for (int i = 0; i < m_Tanks.Length; i++) {
-			if (m_Tanks [i].m_PlayerNumber == tank)
+			if (m_Tanks [i].m_TankObject.m_PlayerNumber == tank)
 				return m_Tanks [i];
 		}
 		return null;
@@ -232,6 +240,8 @@ public class GameManager : MonoBehaviour
 
 	public void Quit()
 	{
+		for (int i = 0; i < m_Tanks.Length; i++)
+			m_Tanks [i].m_TankObject.m_PlayerScore = m_StartScore;
 		#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
 		#else

@@ -8,7 +8,7 @@ public class MachineGunScript : MonoBehaviour {
 	public float m_MaxLifeTime = 1500f;                  
 	public float m_ExplosionRadius = 0.1f;
 
-	[HideInInspector] public TankManager m_TankManager;
+	[HideInInspector] public int m_PlayerNumber;
 
 	// Use this for initialization
 	void Start () {
@@ -38,10 +38,11 @@ public class MachineGunScript : MonoBehaviour {
 			int damage = 5;
 
 			TankShooting targetShooting = targetRigidbody.GetComponent<TankShooting> ();
-			if (m_TankManager.m_PlayerNumber == targetShooting.m_PlayerNumber) {
-				m_TankManager.SubPoints (damage);
+			TankManager tankManager = GameManager.m_Instance.FindTankManager (m_PlayerNumber);
+			if (m_PlayerNumber == targetShooting.m_PlayerNumber) {
+				tankManager.SubPoints (damage);
 			} else {
-				m_TankManager.AddPoints (damage);
+				tankManager.AddPoints (damage);
 			}
 
 			targetHealth.TakeDamage (damage);

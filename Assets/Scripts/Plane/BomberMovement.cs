@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaneMovement : MonoBehaviour {
+public class BomberMovement : MonoBehaviour {
 
 	[HideInInspector]public int m_TargetPlayer = 1;
 	[HideInInspector]public TankManager m_TargetTank;
 	[HideInInspector]public Vector3 m_Velocity;
 
 	public float m_Altitude;
-	public PlaneShooting m_PlaneShooting;
+	public BomberShooting m_BomberShooting;
 
 	private Vector3 m_TempPosition;
 	private Vector3 m_StartPosition;
@@ -32,7 +32,7 @@ public class PlaneMovement : MonoBehaviour {
 
 	void FixedUpdate()
 	{
-		MovePlane ();
+		MoveBomber ();
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -41,18 +41,18 @@ public class PlaneMovement : MonoBehaviour {
 		planeRigidbody.AddForce (new Vector3 (0, 1, 0));
 	}
 
-	private void MovePlane(){
+	private void MoveBomber(){
 		Vector3 targetPosition = m_TargetTank.m_Instance.transform.position;
 		m_StartPosition.y = targetPosition.y = m_Altitude;
 		m_Destination = (targetPosition - transform.position).normalized;
-		if (!m_PlaneShooting.m_Fired) {
+		if (!m_BomberShooting.m_Fired) {
 			transform.LookAt (targetPosition);
 			m_Rb.MovePosition (transform.position + m_Destination * m_Speed * Time.fixedDeltaTime);
 			m_Velocity = (transform.position - m_LastPosition) / Time.deltaTime;
 		} else {
-			if (m_PlaneShooting.m_Firing) {
+			if (m_BomberShooting.m_Firing) {
 				m_TempDest = true;
-				targetPosition = m_PlaneShooting.m_LastBombTransform.position;
+				targetPosition = m_BomberShooting.m_LastBombTransform.position;
 			}
 				else 
 			{
@@ -84,25 +84,6 @@ public class PlaneMovement : MonoBehaviour {
 		//targetPosition.y = m_Altitude;
 		return Vector3.Distance(targetPosition, transform.position);
 	}
-	private void DropBomb(){
-		/*Vector3 targetPosition = m_TargetTank.m_Instance.transform.position;
-		//targetPosition.y = m_Altitude;
-		float dist = Vector3.Distance(targetPosition, transform.position);
-		print ("Distancia: " + dist);
-		if (m_BombsCount == 0)
-			m_Fired = true;
-		if (dist <= 50.0f && !m_Fired && m_BombInterval >= 0.3f){
-			m_TempDest = true;
-			m_TempPosition = targetPosition;
-			m_TempPosition.y = m_Altitude;
-			Rigidbody bombInstance = Instantiate (m_Bombs, transform.position, transform.rotation) as Rigidbody;
-			bombInstance.velocity += m_Velocity;
-			m_BombsCount--;
-			m_BombInterval = 0;
-			//bombInstance.MovePosition (transform.position + direction * m_Speed * Time.deltaTime);
-			//bombInstance.AddForce(m_Velocity);
-		}
-		m_BombInterval += Time.deltaTime;*/
-	}
+
 
 }

@@ -5,7 +5,7 @@ public class BombExplosion : MonoBehaviour
     public LayerMask m_TankMask;
     public ParticleSystem m_ExplosionParticles;       
     public AudioSource m_ExplosionAudio;              
-    public float m_MaxDamage = 100f;                  
+    public float m_MaxDamage;                  
     public float m_ExplosionForce;            
     public float m_MaxLifeTime = 3f;                  
     public float m_ExplosionRadius;              
@@ -39,7 +39,7 @@ public class BombExplosion : MonoBehaviour
 
 			TankManager tankManager = GameManager.m_Instance.FindTankManager (m_PlayerNumber);
 
-			if (tankManager.m_PlayerNumber == targetShooting.m_PlayerNumber) {
+			if (tankManager.m_TankObject.m_PlayerNumber == targetShooting.m_PlayerNumber) {
 				tankManager.SubPoints ((int)damage);
 			} else {
 				tankManager.AddPoints ((int)damage);

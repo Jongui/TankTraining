@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaneShooting : MonoBehaviour {
+public class BomberShooting : MonoBehaviour {
 
 	public Transform m_FireTransform;
 	public Rigidbody m_Bombs;
 	public int m_BombsCount;
 	public float m_Altitude;
-	public PlaneMovement m_PlaneMovement;
+	public BomberMovement m_BomberMovement;
 	public Transform m_LastBombTransform;
 
 	[HideInInspector] public bool m_Fired;
@@ -38,9 +38,9 @@ public class PlaneShooting : MonoBehaviour {
 	}
 
 	private void DropBomb(){
-		Vector3 targetPosition = m_PlaneMovement.m_TargetTank.m_Instance.transform.position;
+		Vector3 targetPosition = m_BomberMovement.m_TargetTank.m_Instance.transform.position;
 		//targetPosition.y = m_Altitude;
-		float dist = m_PlaneMovement.CalcDistance();
+		float dist = m_BomberMovement.CalcDistance();
 		print ("Distancia: " + dist);
 		if (m_BombsCount == 0) {
 			m_Fired = true;
@@ -48,7 +48,7 @@ public class PlaneShooting : MonoBehaviour {
 		}
 		if (dist <= 50.0f && !m_Fired && m_BombInterval >= 0.3f){
 			Rigidbody bombInstance = Instantiate (m_Bombs, transform.position, transform.rotation) as Rigidbody;
-			bombInstance.velocity += m_PlaneMovement.m_Velocity;
+			bombInstance.velocity += m_BomberMovement.m_Velocity;
 			BombExplosion explosion = bombInstance.GetComponent<BombExplosion> ();
 			explosion.m_PlayerNumber = m_PlayerNumber;
 			m_BombsCount--;

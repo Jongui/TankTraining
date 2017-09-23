@@ -39,7 +39,7 @@ public class ShellExplosion : MonoBehaviour
 
 			TankManager tankManager = GameManager.m_Instance.FindTankManager (m_PlayerNumber);
 
-			if (tankManager.m_PlayerNumber == targetShooting.m_PlayerNumber) {
+			if (tankManager.m_TankObject.m_PlayerNumber == targetShooting.m_PlayerNumber) {
 				tankManager.SubPoints ((int)damage);
 			} else {
 				tankManager.AddPoints ((int)damage);
