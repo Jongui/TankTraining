@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-	public int m_NumRoundsToWin = 5;        
+	public int m_NumRoundsToPlay;
 	public float m_StartDelay = 3f;         
 	public float m_EndDelay = 3f;           
 	public CameraControl m_CameraControl;   
@@ -22,13 +22,19 @@ public class GameManager : MonoBehaviour
 	private TankManager m_GameWinner;
 
 
+	private void Awake()
+	{
+		if (m_Instance == null) {
+			DontDestroyOnLoad (gameObject);
+			m_Instance = this;
+		}
+	}
+
 	private void Start()
 	{
-		for (int i = 0; i < m_Tanks.Length; i++)
-		{
-			m_Tanks[i].m_PlayerNumber = i + 1;
-		}
-		m_Instance = this;
+		
+		SpawnAllTanks ();
+		//m_Instance = this;
 	}
 
 	public void StartGame()
@@ -36,8 +42,6 @@ public class GameManager : MonoBehaviour
 		m_StartWait = new WaitForSeconds(m_StartDelay);
 		m_EndWait = new WaitForSeconds(m_EndDelay);
 
-		SpawnAllTanks();
-		//SpawnPlane ();
 		SetCameraTargets();
 
 		StartCoroutine(GameLoop());
@@ -51,14 +55,10 @@ public class GameManager : MonoBehaviour
 			m_Tanks[i].m_Instance =
 				Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
 			m_Tanks[i].m_PlayerNumber = i + 1;
+			//m_Tanks [i].m_PlayerScore = 1000;
 			m_Tanks[i].Setup();
 		}
 	}
-
-	//private void SpawnPlane()
-	//{
-	//	plane = Instantiate (m_PlanePrefab, m_SpawnPoint.position, m_SpawnPoint.rotation) as GameObject;
-	//}
 
 	private void SetCameraTargets()
 	{
@@ -83,6 +83,8 @@ public class GameManager : MonoBehaviour
 
 		if (m_GameWinner != null)
 		{
+			AudioSource gameSong = m_Instance.GetComponent<AudioSource> ();
+			gameSong.Stop ();
 			SceneManager.LoadScene(0);
 		}
 		else
@@ -158,7 +160,7 @@ public class GameManager : MonoBehaviour
 	{
 		for (int i = 0; i < m_Tanks.Length; i++)
 		{
-			if (m_Tanks[i].m_Wins == m_NumRoundsToWin)
+			if (m_Tanks[i].m_Wins == m_NumRoundsToPlay)
 				return m_Tanks[i];
 		}
 
@@ -213,10 +215,10 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void DestroyAllPlanes(){
-		GameObject[] gameObjects =  GameObject.FindGameObjectsWithTag ("Plane");
+		GameObject[] planeObjects =  GameObject.FindGameObjectsWithTag ("Plane");
 
-		for (int i = 0; i < gameObjects.Length; i++) {
-			Destroy (gameObjects [i]);
+		for (int i = 0; i < planeObjects.Length; i++) {
+			Destroy (planeObjects [i]);
 		}
 	}
 
@@ -226,5 +228,14 @@ public class GameManager : MonoBehaviour
 				return m_Tanks [i];
 		}
 		return null;
+	}
+
+	public void Quit()
+	{
+		#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+		#else
+		Application.Quit ();
+		#endif
 	}
 }

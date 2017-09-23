@@ -5,7 +5,7 @@ public class TankShooting : MonoBehaviour
 {
     public int m_PlayerNumber = 1;  
 	public int m_TargetGuided = 1;
-	public int m_PlanesCount = 1;
+	public int m_PlanesCount;
     public Rigidbody m_Shell;  
 	public Rigidbody m_GuidedShell;
 	public Rigidbody m_MachineGunBullet;
@@ -19,8 +19,8 @@ public class TankShooting : MonoBehaviour
     public float m_MaxChargeTime = 0.75f;
 	[HideInInspector]public Transform m_PlaneSpawnPoint;
 	[HideInInspector]public PlaneManager m_PlaneManager;
-	[HideInInspector]public int m_GuidedShellAmmo;
-	[HideInInspector]public int m_ShellAmmo;
+	[HideInInspector]public int m_GuidedShellAmmo = 0;
+	[HideInInspector]public int m_ShellAmmo = 0;
 	[HideInInspector]public Text m_AmmoText;
 	[HideInInspector]public Color m_PlayerColor;
 	[HideInInspector]public TankManager m_TankManager;
@@ -41,9 +41,7 @@ public class TankShooting : MonoBehaviour
     {
 		m_CurrentLaunchForce = m_MinLaunchForce;
         m_AimSlider.value = m_MinLaunchForce;
-		m_GuidedShellAmmo++;
-		m_ShellAmmo = 100;
-		m_PlanesCount = 1;
+		//m_PlanesCount = 1;
     }
 
 
@@ -58,9 +56,7 @@ public class TankShooting : MonoBehaviour
 
         m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
 
-		m_GuidedShellAmmo = 10;
-		m_PlanesCount = 10;
-		m_ShellAmmo = 100;
+		//m_PlanesCount = 10;
      }
 
     private void Update()
