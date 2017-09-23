@@ -7,7 +7,7 @@ public class TankObject : ScriptableObject {
 	public Color m_PlayerColor;            
 	public BomberManager m_BomberManager;
 	public int m_PlayerNumber;             
-	[HideInInspector] public int m_PlayerScore = 1000;
+	public int m_PlayerScore = 1000;
 	[HideInInspector] public string m_ColoredPlayerText;
 	[HideInInspector] public int m_Wins;  
 	[HideInInspector] public int m_GuidedShellAmmo = 0;
