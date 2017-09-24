@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-
-public class TankMovement : MonoBehaviour
+using UnityEngine.Networking;
+public class TankMovement : NetworkBehaviour
 {
     public int m_PlayerNumber = 1;         
     public float m_Speed = 12f;            
@@ -77,6 +77,9 @@ public class TankMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+		if (!isLocalPlayer)
+			return;
+
         // Move and turn the tank.
 		Move();
 		Turn ();

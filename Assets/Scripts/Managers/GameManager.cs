@@ -26,15 +26,16 @@ public class GameManager : MonoBehaviour
 
 	private void Awake()
 	{
-		if (m_Instance == null) {
+		/*if (m_Instance == null) {
 			m_Instance = this;
-		}
+		}*/
 	}
 
 	private void Start()
 	{
 		
-		SpawnAllTanks ();
+		//SpawnAllTanks ();
+		//StartGame ();
 		//m_Instance = this;
 	}
 
