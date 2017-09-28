@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
-public class ShellExplosion : MonoBehaviour
+public class ShellExplosion : NetworkBehaviour
 {
     public LayerMask m_TankMask;
     public ParticleSystem m_ExplosionParticles;       
@@ -21,7 +22,7 @@ public class ShellExplosion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Find all the tanks in an area around the shell and damage them.
-		Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
+		Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius);//, m_TankMask);
 
 		for (int i = 0; i < colliders.Length; i++) {
 			Rigidbody targetRigidbody = colliders [i].GetComponent<Rigidbody> ();
@@ -35,7 +36,7 @@ public class ShellExplosion : MonoBehaviour
 
 			float damage = CalculateDamage (targetRigidbody.position);
 
-			TankShooting targetShooting = targetRigidbody.GetComponent<TankShooting> ();
+			/*TankShooting targetShooting = targetRigidbody.GetComponent<TankShooting> ();
 
 			TankManager tankManager = GameManager.m_Instance.FindTankManager (m_PlayerNumber);
 
@@ -43,7 +44,7 @@ public class ShellExplosion : MonoBehaviour
 				tankManager.SubPoints ((int)damage);
 			} else {
 				tankManager.AddPoints ((int)damage);
-			}
+			}*/
 
 			targetHealth.TakeDamage (damage);
 		}

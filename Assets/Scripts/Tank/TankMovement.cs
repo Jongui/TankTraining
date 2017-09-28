@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+
 public class TankMovement : NetworkBehaviour
 {
     public int m_PlayerNumber = 1;         
@@ -10,8 +11,7 @@ public class TankMovement : NetworkBehaviour
     public AudioClip m_EngineDriving;      
     public float m_PitchRange = 0.2f;
 
-    
-    private string m_MovementAxisName;     
+	private string m_MovementAxisName;     
     private string m_TurnAxisName;         
     private Rigidbody m_Rigidbody;         
     private float m_MovementInputValue;    
@@ -41,8 +41,8 @@ public class TankMovement : NetworkBehaviour
 
     private void Start()
     {
-        m_MovementAxisName = "Vertical" + m_PlayerNumber;
-        m_TurnAxisName = "Horizontal" + m_PlayerNumber;
+        m_MovementAxisName = "Vertical";
+        m_TurnAxisName = "Horizontal";
 
         m_OriginalPitch = m_MovementAudio.pitch;
     }
@@ -55,8 +55,7 @@ public class TankMovement : NetworkBehaviour
 		EngineAudio ();
     }
 
-
-    private void EngineAudio()
+	private void EngineAudio()
     {
         // Play the correct audio clip based on whether or not the tank is moving and what audio is currently playing.
 		if(Mathf.Abs(m_MovementInputValue) < 0.1f && Mathf.Abs(m_TurnInputValue) < 0.1f){

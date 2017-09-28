@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class TankHealth : MonoBehaviour
+public class TankHealth : NetworkBehaviour
 {
     public float m_StartingHealth;          
     public Slider m_Slider;                        
@@ -13,7 +14,9 @@ public class TankHealth : MonoBehaviour
 
     private AudioSource m_ExplosionAudio;          
     private ParticleSystem m_ExplosionParticles;   
-    private float m_CurrentHealth;  
+    
+	[SyncVar(hook = "SetHealthUI")]
+	private float m_CurrentHealth;  
     private bool m_Dead;            
 
 
@@ -32,31 +35,33 @@ public class TankHealth : MonoBehaviour
 		m_CurrentHealth = m_StartingHealth;
         m_Dead = false;
 
-        SetHealthUI();
+		SetHealthUI(m_CurrentHealth);
     }
 
     public void TakeDamage(float amount)
     {
+		if (!isServer)
+			return;
         // Adjust the tank's current health, update the UI based on the new health and check whether or not the tank is dead.
 		m_CurrentHealth -= amount;
 
-		SetHealthUI ();
+		//SetHealthUI ();
 
 		if (m_CurrentHealth <= 0f && !m_Dead) {
-			OnDeath ();
+			RpcOnDeath ();
 		}
     }
 
 
-    private void SetHealthUI()
+	private void SetHealthUI(float currentHealth)
     {
         // Adjust the value and colour of the slider.
-		m_Slider.value = m_CurrentHealth;
-		m_FillImage.color = Color.Lerp (m_ZeroHealthColor, m_FullHealthColor, m_CurrentHealth / m_StartingHealth); 
+		m_Slider.value = currentHealth;
+		m_FillImage.color = Color.Lerp (m_ZeroHealthColor, m_FullHealthColor, currentHealth / m_StartingHealth); 
     }
 
-
-    private void OnDeath()
+	[ClientRpc]
+    private void RpcOnDeath()
     {
         // Play the effects for the death of the tank and deactivate it.
 		m_Dead = true;
@@ -67,8 +72,7 @@ public class TankHealth : MonoBehaviour
 		m_ExplosionParticles.Play ();
 		m_ExplosionAudio.Play ();
 
-		TankShooting shooting = gameObject.GetComponent<TankShooting> ();
-		shooting.m_GuidedShellAmmo++;
+		TankShooting.ResetPlayers ();
 
 		gameObject.SetActive (false);
     }

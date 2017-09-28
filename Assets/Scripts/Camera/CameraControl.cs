@@ -11,7 +11,8 @@ public class CameraControl : MonoBehaviour
     private Camera m_Camera;                        
     private float m_ZoomSpeed;                      
     private Vector3 m_MoveVelocity;                 
-    private Vector3 m_DesiredPosition;              
+    private Vector3 m_DesiredPosition;
+	private int m_TargetNumber;
 
 
     private void Awake()
@@ -21,6 +22,7 @@ public class CameraControl : MonoBehaviour
 
 	private void FixedUpdate()
     {
+		UpdateTargets ();
 		EliminateNullTargets ();
         Move();
         Zoom();
@@ -30,11 +32,20 @@ public class CameraControl : MonoBehaviour
     private void Move()
     {
         FindAveragePosition();
-
         transform.position = Vector3.SmoothDamp(transform.position, m_DesiredPosition, ref m_MoveVelocity, m_DampTime);
     }
 
-
+	private void UpdateTargets()
+	{
+		GameObject[] colliders = GameObject.FindGameObjectsWithTag("Player");
+		if (colliders.Length == m_TargetNumber)
+			return;
+		for (int i = 0; i < colliders.Length; i++) 
+		{
+			m_TargetNumber++;
+			this.AddCameraTarget (colliders[i].transform);	
+		}
+	}
     private void FindAveragePosition()
     {
         Vector3 averagePos = new Vector3();
